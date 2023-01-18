@@ -1,0 +1,54 @@
+---
+import PostCard from "../components/PostCard.astro";
+import { CurrentConstants } from "../constants/current.constants";
+import LayoutBase from "../layouts/LayoutBase.astro";
+import { getAllPostsBasic } from "../lib/api";
+
+const title = "Blog da Veggi";
+const description = "Blog do primero delivery vegano do Brasil";
+const permalink = Astro?.site?.href;
+
+const data = await getAllPostsBasic();
+const posts = data.posts.nodes;
+---
+
+<LayoutBase
+  description={description}
+  permalink={permalink}
+  title={title}
+  current={CurrentConstants.BLOG}
+>
+  <div class="grid w-full justify-center grid-cols-blog mt-5 mb-8">
+    {
+      posts.map((post: any) => {
+        return (
+          <PostCard
+            image={post.featuredImage.node.mediaItemUrl}
+            title={post.title}
+            uri={post.uri}
+          />
+        );
+      })
+    }
+  </div>
+</LayoutBase>
+
+<style>
+  .layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    min-height: 100vh;
+  }
+  main {
+    flex: 1;
+    position: relative;
+    margin: 0 auto;
+    max-width: 1400px;
+    padding: 1em 2em;
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+</style>

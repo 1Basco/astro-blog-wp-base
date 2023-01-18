@@ -1,0 +1,40 @@
+---
+import { CurrentConstants } from "../../constants/current.constants";
+import LayoutBase from "../../layouts/LayoutBase.astro";
+import { getAllPostsWithSlugs, getPostBySlug } from "../../lib/api";
+
+export async function getStaticPaths() {
+  const PostsWithSlug = await getAllPostsWithSlugs();
+
+  return PostsWithSlug.nodes.map((node: any) => {
+    return {
+      params: { slug: node.slug },
+    };
+  });
+}
+
+const { slug } = Astro.params;
+const post = await getPostBySlug(slug);
+
+const title = post.title;
+const description = "Post de um blog da veggi";
+const permalink = Astro?.site?.href;
+---
+
+<!-- <div></div> -->
+<LayoutBase
+  description={description}
+  permalink={permalink}
+  title={title}
+  current={CurrentConstants.BLOG}
+>
+  <div class="flex flex-col p-10">
+    <article>
+      <h1
+        class="text-center text-2xl text-black font-semibold my-5"
+        set:html={post.title}
+      />
+      <Fragment set:html={post.content} />
+    </article>
+  </div>
+</LayoutBase>

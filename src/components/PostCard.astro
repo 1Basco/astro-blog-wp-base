@@ -1,0 +1,29 @@
+---
+import { BlogPathsConstants } from "../constants/blog-paths.constants";
+
+export interface Props {
+  title: string;
+  image: string;
+  uri: string;
+}
+const WP_URL = import.meta.env.WORDPRESS_URL;
+
+const { title, image, uri } = Astro.props;
+
+// const imageUrl = `${WP_URL}${image}`;
+const postUrl = `${BlogPathsConstants.POST}${uri}`;
+---
+
+<div class="">
+  <a href={postUrl} class="slide-image text-center" title={title}>
+    <center>
+      <img
+        src={image}
+        class="rounded-xl h-[280px] w-72"
+        sizes="(max-width: 495px) 100vw, 495px"
+        width="495"
+      />
+    </center>
+  </a>
+  <h5 class="font-semibold text-4xl text-center -tracking-tighter">{title}</h5>
+</div>
